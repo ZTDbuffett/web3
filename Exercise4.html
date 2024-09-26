@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Number Guessing Game - Exercise 4</title>
+    <script src="randominteger.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #guessInput {
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        #message {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        nav {
+            margin-bottom: 20px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav li {
+            display: inline;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+
+<body onload="initializeGame();">
+    <nav>
+        <ul>
+            <li><a href="index.html">Exercise 1</a></li>
+            <li><a href="Exercise2.html">Exercise 2</a></li>
+            <li><a href="Exercise3.html">Exercise 3</a></li>
+            <li><a href="Exercise4.html">Exercise 4</a></li>
+        </ul>
+    </nav>
+
+    <h1>Welcome to the Number Guessing Game!</h1>
+    <p>Try to guess a number between 1 and 100. You have 10 attempts.</p>
+
+    <input type="number" id="guessInput" placeholder="Enter your guess" min="1" max="100">
+    <button id="guessButton">Submit Guess</button>
+
+    <p id="message"></p>
+
+    <script>
+        let game;
+
+        function initializeGame() {
+            game = createGame();
+        }
+
+        function createGame() {
+            let targetNumber = randomInt();
+            let attemptsLeft = 10;
+            const guesses = [];
+
+            return {
+                guess: function (userGuess) {
+                    let feedback = '';
+                    userGuess = parseInt(userGuess);
+                    attemptsLeft--;
+                    guesses.push(userGuess);
+
+                    if (userGuess === targetNumber) {
+                        feedback = `Congratulations! You've guessed it! The number was ${targetNumber}. A new number has been generated.`;
+                        this.resetGame();
+                    } else if (attemptsLeft === 0) {
+                        feedback = `Game Over! You've used all your attempts. The number was ${targetNumber}.`;
+                        this.resetGame();
+                    } else {
+                        feedback = userGuess < targetNumber
+                            ? `Too low! Attempts left: ${attemptsLeft}. Previous guesses: ${guesses.join(', ')}`
+                            : `Too high! Attempts left: ${attemptsLeft}. Previous guesses: ${guesses.join(', ')}`;
+                    }
+                    return feedback;
+                },
+                resetGame: function () {
+                    targetNumber = randomInt();
+                    attemptsLeft = 10;
+                    guesses.length = 0; // Clear previous guesses
+                }
+            };
+        }
+
+        document.getElementById("guessButton").onclick = function () {
+            const userGuess = document.getElementById("guessInput").value;
+            const resultMessage = game.guess(userGuess);
+            document.getElementById("message").textContent = resultMessage;
+            document.getElementById("guessInput").value = ''; // Clear the input
+        };
+    </script>
+</body>
+
+</html>

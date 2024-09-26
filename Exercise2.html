@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Geolocation Feature - Exercise 2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        section {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        #location-info {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Geolocation Feature - Exercise 2</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="index.html">Exercise 1</a></li>
+            <li><a href="Exercise2.html">Exercise 2</a></li>
+            <li><a href="Exercise3.html">Exercise 3</a></li>
+            <li><a href="Exercise4.html">Exercise 4</a></li>
+        </ul>
+    </nav>
+    <section>
+        <h2>Discover Your Location</h2>
+        <button id="locateBtn">Get My Location</button>
+        <p id="location-info"></p>
+    </section>
+
+    <script>
+        document.getElementById('locateBtn').addEventListener('click', function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                displayMessage("Geolocation is not supported by this browser.");
+            }
+        });
+
+        function showPosition(position) {
+            const { latitude, longitude } = position.coords;
+            displayMessage(`Latitude: ${latitude}, Longitude: ${longitude}`);
+        }
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    displayMessage("You denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    displayMessage("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    displayMessage("The request to get user location timed out.");
+                    break;
+                default:
+                    displayMessage("An unexpected error occurred.");
+                    break;
+            }
+        }
+
+        function displayMessage(message) {
+            document.getElementById('location-info').textContent = message;
+        }
+    </script>
+</body>
+
+</html>
